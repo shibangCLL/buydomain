@@ -1,0 +1,109 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>用户注册</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+    <script src="{% static 'js/demo-rtl.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/nanoscroller.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/theme_styles.css' %}">
+    <link href="{% static 'css/css.css' %}" rel='stylesheet' type='text/css'>
+</head>
+<body id="login-page">
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+            <div id="login-box">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <header id="login-header">
+                            <div id="login-logo">
+                                <img src="{% static 'picture/logo.png' %}" alt="">
+                            </div>
+                        </header>
+                        <div id="login-box-inner">
+                                <p id="error-box"></p>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                    <input class="form-control" name="username" type="text" placeholder="Full name">
+                                </div>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+                                    <input class="form-control" type="text" name="email" placeholder="Email address">
+                                </div>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                                    <input type="password" class="form-control" name="password" placeholder="Enter password">
+                                </div>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-unlock-alt"></i></span>
+                                    <input type="password" class="form-control" name="r_password" placeholder="Re-enter password">
+                                </div>
+                                <div id="remember-me-wrapper">
+                                    <div class="row">
+                                        <div class="col-xs-12">
+                                            <div class="checkbox-nice">
+                                                <input type="checkbox" id="terms-cond" checked="checked">
+                                                <label for="terms-cond">
+                                                    I accept terms and conditions
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <button type="submit" class="btn btn-success col-xs-12" id="register">Register</button>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="{% static 'js/demo-skin-changer.js' %}"></script>
+<script src="{% static 'js/jquery.js' %}"></script>
+<script src="{% static 'js/bootstrap.js' %}"></script>
+<script src="{% static 'js/jquery.nanoscroller.min.js' %}"></script>
+<script src="{% static 'js/demo.js' %}"></script>
+<script src="{% static 'js/scripts.js' %}"></script>
+<script>
+    $("#register").click(function () {
+        $.ajax({
+            url: "{% url 'member:register' %}",
+            type: "POST",
+            data: {
+                username: $("input[name='username']").val(),
+                email: $("input[name='email']").val(),
+                password: $("input[name='password']").val(),
+                r_password: $("input[name='r_password']").val(),
+                csrfmiddlewaretoken: '{{ csrf_token }}',
+            },
+            success: function (data) {
+                console.log(data)
+                if (data === 'ok') {
+                    alert('恭喜你，注册成功!')
+                } else {
+                    if (data === '两次输入的密码不同！')
+                    alert('两次输入的密码不同！')
+                    if (data === '该邮箱已经被注册了！')
+                        alert('该邮箱已经被注册了!')
+                    if (data === '用户名已经存在！')
+                        alert('用户名已经存在!')
+                }
+            },
+
+        })
+    })
+</script>
+
+</body>
+</html>
